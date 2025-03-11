@@ -46,7 +46,7 @@ def get_streaming_uri():
         print(f"Received visitorData: {visitor_data}")
 
         # Initialize YouTube with PoToken and visitorData
-        yt = YouTube(video_url, use_po_token=True)
+        yt = YouTube(video_url, "Web")
 
 
         # Get the highest resolution stream
