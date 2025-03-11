@@ -35,16 +35,22 @@ def get_streaming_uri():
         data = request.get_json()
         video_url = data.get("url")
         po_token = data.get("poToken")
+        visitor_data = data.get("visitorData")  # Assuming you also want to receive visitorData
 
-        if not video_url or not po_token:
-            return jsonify({"error": "You must provide both a YouTube video URL and PoToken"}), 400
+        if not video_url or not po_token or not visitor_data:
+            return jsonify({"error": "You must provide a YouTube video URL, PoToken, and visitorData"}), 400
 
         # Debugging: Print received token and video URL
         print(f"Received video URL: {video_url}")
         print(f"Received PoToken: {po_token}")
+        print(f"Received visitorData: {visitor_data}")
 
-        # Initialize YouTube with PoToken
-        yt = YouTube(video_url, 'WEB')
+        # Initialize YouTube with PoToken and visitorData
+        yt = YouTube(video_url, use_po_token=True)
+        yt.visitor_data = visitor_data
+        yt.po_token = po_token
+
+        # Get the highest resolution stream
         stream = yt.streams.get_highest_resolution()
 
         return jsonify({"streaming_uri": stream.url})
