@@ -27,16 +27,19 @@ def generate_token():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Endpoint to get the streaming URI
-@app.route('/streaming-uri', methods=['POST'])
+@app.route('/streaming-uri', methods=['GET'])
 def get_streaming_uri():
     try:
-        data = request.get_json()
-        video_url = data.get("url")
-        po_token = data.get("poToken")  # Accept the PoToken from the request body
+        # Retrieve the parameters from the query string
+        video_url = request.args.get("url")
+        po_token = request.args.get("poToken")
 
         if not video_url or not po_token:
             return jsonify({"error": "You must provide both a YouTube video URL and PoToken"}), 400
+
+        # Debug logging
+        print(f"Processing video URL: {video_url}")
+        print(f"Using PoToken: {po_token}")
 
         # Use the PoToken while initializing YouTube
         yt = YouTube(video_url, use_po_token=True, token=po_token)
@@ -44,6 +47,7 @@ def get_streaming_uri():
 
         return jsonify({"streaming_uri": stream.url})
     except Exception as e:
+        print(f"An error occurred: {e}")
         return jsonify({"error": str(e)}), 500
 
 
