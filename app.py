@@ -14,7 +14,7 @@ def get_streaming_uri():
             return jsonify({"error": "You must provide a YouTube video URL"}), 400
 
         # Process the YouTube video
-        yt = YouTube(video_url)
+        yt = YouTube(video_url,use_po_token=True)
         stream = yt.streams.get_highest_resolution()
 
         # Return the streaming URI
