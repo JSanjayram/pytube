@@ -44,7 +44,7 @@ def get_streaming_uri():
         print(f"Received PoToken: {po_token}")
 
         # Initialize YouTube with PoToken
-        yt = YouTube(video_url, use_po_token=True, token=po_token)
+        yt = YouTube(video_url, 'WEB')
         stream = yt.streams.get_highest_resolution()
 
         return jsonify({"streaming_uri": stream.url})
